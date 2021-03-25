@@ -64,7 +64,7 @@ def login():
         if len(id_players_avec_email_et_password) > 0:
             print(id_players_avec_email_et_password[0]["players_id"])
             player_id = {"id" : int(id_players_avec_email_et_password[0]["players_id"])}
-            return player_id, 418
+            return jsonify(player_id)
         else:
             return "Password Incorrect", 403
     else:
@@ -109,8 +109,17 @@ def rooms_handling(players_id):
 
 
 def get_rooms_request(players_id):
-    return "Not implemented", 501
+    #on recup les infos des rooms appartenant au joueur
+    sql_request = f'''SELECT * FROM rooms WHERE players_id = "{players_id}"'''
+    player_rooms_info = sql_select(sql_request)
 
+
+    for room in player_rooms_info:
+        sql_request = f'''SELECT * FROM cats WHERE rooms_id = "{room["rooms_id"]}"'''
+        room["cats"] = sql_select(sql_request)
+
+    print(player_rooms_info)
+    return jsonify(player_rooms_info)
 
 def add_room_request(players_id, request_json):
     print(request_json)
