@@ -168,7 +168,25 @@ def get_free_cats():
 
 @app.route('/cats/<int:cats_id>', methods=['PATCH', 'DELETE'])
 def update_cat(cats_id):
-    
+    if request.method == 'PATCH':
+        formulaire = request.get_json()
+        cat_rooms_id = formulaire["rooms_id"]
 
-    return "Not implemented", 501
+        sql_request = f'''SELECT * FROM cats WHERE cats_id = "{cats_id}"'''
+        cats_info = sql_select(sql_request)
+
+        sql_request = f'''UPDATE cats SET rooms_id = "{cat_rooms_id}" WHERE cats_id = "{cats_id}"'''
+        
+        if cats_info[0]["rooms_id"] == None:
+            sql_update(sql_request)
+            return "OK chat adopté", 200
+        else:
+            sql_update(sql_request)
+            return "OK chat déplacé", 200
+
+
+
+    elif request.method == 'DELETE':
+        print()
+
 
