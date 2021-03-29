@@ -176,7 +176,7 @@ def update_cat(cats_id):
         cats_info = sql_select(sql_request)
 
         sql_request = f'''UPDATE cats SET rooms_id = "{cat_rooms_id}" WHERE cats_id = "{cats_id}"'''
-        
+
         if cats_info[0]["rooms_id"] == None:
             sql_update(sql_request)
             return "OK chat adopté", 200
@@ -184,9 +184,7 @@ def update_cat(cats_id):
             sql_update(sql_request)
             return "OK chat déplacé", 200
 
-
-
     elif request.method == 'DELETE':
-        print()
-
-
+        sql_request = f'''UPDATE cats SET rooms_id = NULL WHERE cats_id = "{cats_id}"'''
+        sql_update(sql_request)
+        return "OK chat relaché", 200
